@@ -15,12 +15,12 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended : true}))
 
-const db = require('./server/models')
+const db = require('./models')
 
 db.sequelize.sync()
 
-require('./server/routes/auth-routes')(app)
-require('./server/routes/user-routes')(app)
+require('./routes/auth-routes')(app)
+require('./routes/user-routes')(app)
 
 app.get('/', (req, res) => {
     res.json({message : 'Bork bork bork'})
