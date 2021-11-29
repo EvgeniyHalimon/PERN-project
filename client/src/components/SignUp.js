@@ -41,10 +41,15 @@ function SignUp(){
             email: values.email,
             password: values.password,
             roles: ['User']
-        }).catch(err => console.log(err))
+        })
+        .then(res => {
+            if(res.status === 200){
+                setStatus('The form has been submitted')
+                navigate("/home")
+            }
+        })
+        .catch(err => console.log(err))
         actions.resetForm()
-        setStatus('The form has been submitted')
-        navigate("/home")
     },
     });
 

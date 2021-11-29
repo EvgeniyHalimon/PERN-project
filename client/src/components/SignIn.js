@@ -1,7 +1,8 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField, FormControl, Box}  from '@mui/material';
+import {Alert} from 'react-bootstrap'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
@@ -16,8 +17,9 @@ const validationSchema = yup.object({
 });
 
 function SignIn(){
-    const navigate = useNavigate
+    const navigate = useNavigate()
     const [status, setStatus] = useState('')
+    const [error, setError] = useState(false)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -29,8 +31,23 @@ function SignIn(){
             axios.post('http://localhost:3000/api/auth/signin', {
                 email: values.email,
                 password: values.password,
-            }).catch(err => console.log(err))
-            navigate('home')
+            })
+            .then(res => {
+                if(res.status === 200){
+                    console.log(res)
+                    navigate('/home')
+                }
+            })
+            .catch(err => {
+                if(err.response.status === 401){
+                    setError(true)
+                    setStatus('Invalid password')
+                } else if (err.response.status === 404){
+                    setError(true)
+                    setStatus('User not found')
+                }
+                console.log(err)
+            })
         },
     });
 
@@ -67,6 +84,12 @@ function SignIn(){
                 Submit
             </Button>
             </FormControl>
+            {error ? 
+            <Alert variant='danger'>
+                {status}
+            </Alert> :
+            <div></div>
+            }
         </Box>
     )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import {Navbar, Container, Nav} from 'react-bootstrap'
+import {Navbar, Container, Nav, Button} from 'react-bootstrap'
 
 function Navigation(){
     return(
@@ -13,9 +13,10 @@ function Navigation(){
                 <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
                 </Nav>
-                <Nav>
+                <Nav style={{alignItems: 'center'}}>
                     <Link to='/signup'>Sign up</Link>
                     <Link to='/signin'>Sign in</Link>
+                    <Link to='/'>Logout</Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>
