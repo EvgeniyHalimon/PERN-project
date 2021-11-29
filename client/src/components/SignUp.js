@@ -27,11 +27,12 @@ function SignUp(){
         username: '',
         email: '',
         password: '',
+        roles: ['User']
     },
     validationSchema: validationSchema,
     onSubmit: (values,actions) => {
         console.log(values)
-        axios.post('http://localhost:3000/signup', {
+        axios.post('http://localhost:3000/api/auth/signup', {
             username : values.username,
             email: values.email,
             password: values.password

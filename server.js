@@ -8,7 +8,7 @@ const corsOptions = {
     origin: 'http://localhost:3001'
 }
 
-const PORT = 3005
+const PORT = 3000
 
 app.use(cors(corsOptions))
 
@@ -27,5 +27,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, (error) => {
-    error ? console.log(error) : console.log(`listening port ${PORT}`)
+    error ? console.log(error) : console.log(`==================listening port ${PORT}==================`)
 })
