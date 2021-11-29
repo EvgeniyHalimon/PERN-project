@@ -4,8 +4,10 @@ import * as yup from 'yup';
 import { Button, TextField, FormControl, Box}  from '@mui/material';
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
+import AuthStore from '../store/AuthStore';
+import {observer} from 'mobx-react-lite'
 
-
+const store = new AuthStore()
 
 const validationSchema = yup.object({
     username: yup
@@ -21,9 +23,9 @@ const validationSchema = yup.object({
         .string()
         .required('Password is required.') 
         .min(8, 'Password is too short - should be 8 chars minimum.')
-});
+})
 
-function SignUp(){
+export const SignUp = observer(() => {
     const navigate = useNavigate()
     const [status, setStatus] = useState('')
     const formik = useFormik({
@@ -34,7 +36,7 @@ function SignUp(){
         roles: ['User']
     },
     validationSchema: validationSchema,
-    onSubmit: (values,actions) => {
+    onSubmit: (values) => {
         console.log(values)
         axios.post('http://localhost:3000/api/auth/signup', {
             username : values.username,
@@ -45,11 +47,13 @@ function SignUp(){
         .then(res => {
             if(res.status === 200){
                 setStatus('The form has been submitted')
+                store.setLoggedOut(!false)
+                store.setLoggedIn(!false)
+                store.setSignedUp(!false)
                 navigate("/home")
             }
         })
         .catch(err => console.log(err))
-        actions.resetForm()
     },
     });
 
@@ -100,7 +104,7 @@ function SignUp(){
             <div>{status}</div>
         </Box>
     )
-}
+})
 
-export default SignUp
+
 

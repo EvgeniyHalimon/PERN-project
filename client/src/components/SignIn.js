@@ -5,6 +5,10 @@ import { Button, TextField, FormControl, Box}  from '@mui/material';
 import {Alert} from 'react-bootstrap'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import AuthStore from '../store/AuthStore';
+import {observer} from 'mobx-react-lite'
+
+const store = new AuthStore()
 
 const validationSchema = yup.object({
     email: yup
@@ -14,12 +18,13 @@ const validationSchema = yup.object({
     password: yup
         .string()
         .required('Password is required.') 
-});
+})
 
-function SignIn(){
+export const SignIn = observer(() => {
     const navigate = useNavigate()
     const [status, setStatus] = useState('')
     const [error, setError] = useState(false)
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -27,18 +32,22 @@ function SignIn(){
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values)
             axios.post('http://localhost:3000/api/auth/signin', {
                 email: values.email,
                 password: values.password,
             })
             .then(res => {
+                console.log(res)
+                console.log(res.status)
                 if(res.status === 200){
-                    console.log(res)
+                    store.setSignedUp(!false)
+                    store.setLoggedIn(!false)
+                    console.log('IN SIGNIN COMPONENT',store.loggenIn)
                     navigate('/home')
                 }
             })
             .catch(err => {
+                console.log(err)
                 if(err.response.status === 401){
                     setError(true)
                     setStatus('Invalid password')
@@ -46,7 +55,6 @@ function SignIn(){
                     setError(true)
                     setStatus('User not found')
                 }
-                console.log(err)
             })
         },
     });
@@ -92,7 +100,5 @@ function SignIn(){
             }
         </Box>
     )
-}
-
-export default SignIn
+})
 

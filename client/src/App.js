@@ -1,11 +1,13 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import {SignIn} from './components/SignIn';
+import {SignUp} from './components/SignUp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navigation from './components/Navigation';
 import Home from './components/Home';
 import Welcome from './components/Welcome';
+import { Navigation } from './components/Navigation';
+
+
 
 function App() {
   return (
