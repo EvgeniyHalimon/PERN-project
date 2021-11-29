@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField, FormControl, Box}  from '@mui/material';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = yup.object({
     email: yup
@@ -12,10 +13,10 @@ const validationSchema = yup.object({
     password: yup
         .string()
         .required('Password is required.') 
-        .min(8, 'Password is too short - should be 8 chars minimum.')
 });
 
 function SignIn(){
+    const navigate = useNavigate
     const [status, setStatus] = useState('')
     const formik = useFormik({
         initialValues: {
@@ -25,10 +26,11 @@ function SignIn(){
         validationSchema: validationSchema,
         onSubmit: (values) => {
             console.log(values)
-            axios.post('http://localhost:3000/signin', {
+            axios.post('http://localhost:3000/api/auth/signin', {
                 email: values.email,
                 password: values.password,
             }).catch(err => console.log(err))
+            navigate('home')
         },
     });
 

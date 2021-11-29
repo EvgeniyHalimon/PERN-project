@@ -3,6 +3,9 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField, FormControl, Box}  from '@mui/material';
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
+
+
 
 const validationSchema = yup.object({
     username: yup
@@ -21,6 +24,7 @@ const validationSchema = yup.object({
 });
 
 function SignUp(){
+    const navigate = useNavigate()
     const [status, setStatus] = useState('')
     const formik = useFormik({
     initialValues: {
@@ -35,10 +39,12 @@ function SignUp(){
         axios.post('http://localhost:3000/api/auth/signup', {
             username : values.username,
             email: values.email,
-            password: values.password
+            password: values.password,
+            roles: ['User']
         }).catch(err => console.log(err))
         actions.resetForm()
         setStatus('The form has been submitted')
+        navigate("/home")
     },
     });
 
