@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
     case 'SIGN_UP':
         return {
             signedUp : action.payload,
-            signedUp : true,
+            loggedIn : false,
             loggedOut : true
         }
     case 'LOG_OUT':

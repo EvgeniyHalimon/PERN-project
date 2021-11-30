@@ -50,7 +50,7 @@ function SignUp(){
             if(res.status === 200){
                 setStatus('The form has been submitted')
                 dispatch(setSignedUp(true))
-                navigate("/home")
+                navigate("/signin")
             }
         })
         .catch(err => console.log(err))

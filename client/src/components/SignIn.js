@@ -44,6 +44,7 @@ function SignIn(){
                     console.log(res.data.accessToken)
                     const decoded = jwt.decode(res.data.accessToken)
                     console.log(decoded.id)
+                    console.log(decoded.username)
                     if(res.status === 200){
                         dispatch(setLoggedIn(true))
                         navigate('/home')
