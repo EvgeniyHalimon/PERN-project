@@ -1,14 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import {Navbar, Container, Nav } from 'react-bootstrap'
-import {observer} from 'mobx-react-lite'
-import AuthStore from '../store/AuthStore';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLoggedOut } from '../actions/actions';
+import { connect } from 'react-redux';
+// const store = new AuthStore()
 
-const store = new AuthStore()
-console.log("LOG",store.loggenIn)
-console.log("SIGN",store.signedUp)
+function Navigation(){
 
-export const Navigation = observer(() => {
+    const dispatch = useDispatch()
+    const loggedIn = useSelector(state => state.loggedIn) 
+    const loggedOut = useSelector(state => state.loggedOut) 
+    const signedUp = useSelector(state => state.signedUp) 
+
+
+console.log('LOGIN STATE',loggedIn)
+console.log('SIGNEDUP STATE',signedUp)
+console.log('LOGOUT STATE',loggedOut)
+
     return(
         <Navbar expand="lg" bg="dark" variant="dark">
             <Container>
@@ -21,31 +30,30 @@ export const Navigation = observer(() => {
                 </Nav>
                 <Nav style={{alignItems: 'center'}}>
                     {
-                        store.signedUp ? 
+                        signedUp ? 
                         <div></div> : 
                         <Link to='/signup'>Sign up</Link>
                     }
                     {
-                        store.loggenIn ? 
+                        loggedIn ? 
                         <div></div> :
                         <Link to='/signin'>Sign in</Link>
                     }
                     {
-                        store.loggedOut ? 
+                        loggedOut ? 
                         <Link 
-                        to='/'
-                        onClick={
-                            () => store.setLoggedOut(false),
-                            () => store.setLoggedIn(false)
-                        }
+                            to='/'
+                            onClick={dispatch(setLoggedOut(false))}
                         >
                             Logout
                         </Link> :
-                        <div></div>
+                        <div></div> 
                     }
                 </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
     )
-})
+}
+
+export default connect()(Navigation)

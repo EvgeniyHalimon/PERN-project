@@ -4,10 +4,10 @@ import * as yup from 'yup';
 import { Button, TextField, FormControl, Box}  from '@mui/material';
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
-import AuthStore from '../store/AuthStore';
-import {observer} from 'mobx-react-lite'
-
-const store = new AuthStore()
+import { useDispatch } from 'react-redux';
+import { setSignedUp } from '../actions/actions';
+import { connect } from 'react-redux';
+// const store = new AuthStore()
 
 const validationSchema = yup.object({
     username: yup
@@ -25,9 +25,11 @@ const validationSchema = yup.object({
         .min(8, 'Password is too short - should be 8 chars minimum.')
 })
 
-export const SignUp = observer(() => {
+function SignUp(){
     const navigate = useNavigate()
     const [status, setStatus] = useState('')
+    const dispatch = useDispatch()
+    
     const formik = useFormik({
     initialValues: {
         username: '',
@@ -47,9 +49,7 @@ export const SignUp = observer(() => {
         .then(res => {
             if(res.status === 200){
                 setStatus('The form has been submitted')
-                store.setLoggedOut(!false)
-                store.setLoggedIn(!false)
-                store.setSignedUp(!false)
+                dispatch(setSignedUp(true))
                 navigate("/home")
             }
         })
@@ -104,7 +104,7 @@ export const SignUp = observer(() => {
             <div>{status}</div>
         </Box>
     )
-})
+}
 
-
+export default connect()(SignUp)
 

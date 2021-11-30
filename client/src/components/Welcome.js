@@ -5,7 +5,7 @@ function Welcome(){
     return(
         <Container style={{textAlign: 'center'}}>
             <h1>Welcome to our app</h1>
-            <img src="https://lh3.googleusercontent.com/proxy/iqoTzaEHtiWUPjxEruxLZrQ8Gx0VGgFJRS55Ydm3n64YnGDku952JQ-d3BmR3iUKseXieVCDadXYWddE" alt="greetings" />
+            <img src="https://blueehr.com/wp-content/uploads/2018/03/02.png" alt="greetings" />
         </Container>
     )
 }

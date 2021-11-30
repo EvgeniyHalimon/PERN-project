@@ -5,10 +5,10 @@ import { Button, TextField, FormControl, Box}  from '@mui/material';
 import {Alert} from 'react-bootstrap'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import AuthStore from '../store/AuthStore';
-import {observer} from 'mobx-react-lite'
-
-const store = new AuthStore()
+import { useDispatch } from 'react-redux';
+import { setLoggedIn } from '../actions/actions'
+import { connect } from 'react-redux';
+const jwt = require('jsonwebtoken')
 
 const validationSchema = yup.object({
     email: yup
@@ -20,10 +20,13 @@ const validationSchema = yup.object({
         .required('Password is required.') 
 })
 
-export const SignIn = observer(() => {
+
+
+function SignIn(){
     const navigate = useNavigate()
     const [status, setStatus] = useState('')
     const [error, setError] = useState(false)
+    const dispatch = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -33,31 +36,33 @@ export const SignIn = observer(() => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             axios.post('http://localhost:3000/api/auth/signin', {
-                email: values.email,
-                password: values.password,
-            })
-            .then(res => {
-                console.log(res)
-                console.log(res.status)
-                if(res.status === 200){
-                    store.setSignedUp(!false)
-                    store.setLoggedIn(!false)
-                    console.log('IN SIGNIN COMPONENT',store.loggenIn)
-                    navigate('/home')
-                }
-            })
-            .catch(err => {
-                console.log(err)
-                if(err.response.status === 401){
-                    setError(true)
-                    setStatus('Invalid password')
-                } else if (err.response.status === 404){
-                    setError(true)
-                    setStatus('User not found')
-                }
-            })
+                    email: values.email,
+                    password: values.password,
+                })
+                .then(res => {
+                    console.log(res)
+                    console.log(res.data.accessToken)
+                    const decoded = jwt.decode(res.data.accessToken)
+                    console.log(decoded.id)
+                    if(res.status === 200){
+                        dispatch(setLoggedIn(true))
+                        navigate('/home')
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    if(err.response.status === 401){
+                        setError(true)
+                        setStatus('Invalid password')
+                    } else if (err.response.status === 404){
+                        setError(true)
+                        setStatus('User not found')
+                    }
+                })
         },
     });
+
+    
 
     return (
         <Box
@@ -93,12 +98,13 @@ export const SignIn = observer(() => {
             </Button>
             </FormControl>
             {error ? 
-            <Alert variant='danger'>
-                {status}
-            </Alert> :
-            <div></div>
+                <Alert variant='danger'>
+                    {status}
+                </Alert> :
+                <div></div>
             }
         </Box>
     )
-})
+}
 
+export default connect()(SignIn)
