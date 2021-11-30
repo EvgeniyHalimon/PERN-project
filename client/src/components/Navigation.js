@@ -1,22 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom'
 import {Navbar, Container, Nav } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux';
-import { setLoggedOut } from '../actions/actions';
 import { connect } from 'react-redux';
-// const store = new AuthStore()
+import { setLoggedIn } from '../actions/actions';
+
+
 
 function Navigation(){
 
     const dispatch = useDispatch()
     const loggedIn = useSelector(state => state.loggedIn) 
     const loggedOut = useSelector(state => state.loggedOut) 
-    const signedUp = useSelector(state => state.signedUp) 
+    const storedToken = localStorage.getItem('token')
+    const [token, setToken] = useState(storedToken)
 
-
-console.log('LOGIN STATE',loggedIn)
-console.log('SIGNEDUP STATE',signedUp)
-console.log('LOGOUT STATE',loggedOut)
+    useEffect(() => {
+        console.log('nav',token)
+        localStorage.setItem('token', token)
+    }, [token]);
 
     return(
         <Navbar expand="lg" bg="dark" variant="dark">
@@ -30,24 +32,20 @@ console.log('LOGOUT STATE',loggedOut)
                 </Nav>
                 <Nav style={{alignItems: 'center'}}>
                     {
-                        signedUp ? 
-                        <div></div> : 
-                        <Link to='/signup'>Sign up</Link>
-                    }
-                    {
-                        loggedIn ? 
-                        <div></div> :
-                        <Link to='/signin'>Sign in</Link>
-                    }
-                    {
-                        loggedOut ? 
+                        token ?
                         <Link 
                             to='/'
-                            onClick={dispatch(setLoggedOut(false))}
+                            onClick={
+                                () => setToken("")
+                            }
                         >
                             Logout
-                        </Link> :
-                        <div></div> 
+                        </Link> : 
+                        <div>
+                            <Link to='/signup'>Sign up</Link>
+                            <Link to='/signin'>Sign in</Link>
+                        </div> 
+                        
                     }
                 </Nav>
                 </Navbar.Collapse>

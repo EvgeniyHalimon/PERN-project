@@ -1,7 +1,8 @@
 const initialState ={
     loggedIn : false,
     signedUp : false,
-    loggedOut : false
+    loggedOut : false,
+    token: ''
 }
 
 const reducer = (state = initialState, action) => {
@@ -21,9 +22,14 @@ const reducer = (state = initialState, action) => {
         }
     case 'LOG_OUT':
         return {
+            ...state,
             loggedOut : action.payload,
-            ...state
         }
+    case 'TOKEN':
+        return {
+            ...state,
+            token : action.payload,
+        }    
     default:
         return state
     }

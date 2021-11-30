@@ -19,8 +19,16 @@ const setLoggedOut = (bool) => {
     }
 }
 
+const setToken = (token) => {
+    return{
+        type : 'TOKEN',
+        payload: token
+    }
+}
+
 export{
     setLoggedIn,
     setSignedUp,
-    setLoggedOut
+    setLoggedOut,
+    setToken
 }

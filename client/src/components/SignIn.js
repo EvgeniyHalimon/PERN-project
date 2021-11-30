@@ -6,9 +6,8 @@ import {Alert} from 'react-bootstrap'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLoggedIn } from '../actions/actions'
+import { setLoggedIn, setToken } from '../actions/actions'
 import { connect } from 'react-redux';
-const jwt = require('jsonwebtoken')
 
 const validationSchema = yup.object({
     email: yup
@@ -19,7 +18,6 @@ const validationSchema = yup.object({
         .string()
         .required('Password is required.') 
 })
-
 
 
 function SignIn(){
@@ -42,11 +40,13 @@ function SignIn(){
                 .then(res => {
                     console.log(res)
                     console.log(res.data.accessToken)
-                    const decoded = jwt.decode(res.data.accessToken)
+                    /* const decoded = jwt.decode(res.data.accessToken)
                     console.log(decoded.id)
-                    console.log(decoded.username)
+                    console.log(decoded.username) */
                     if(res.status === 200){
+                        localStorage.setItem('token', res.data.accessToken)
                         dispatch(setLoggedIn(true))
+                        dispatch(setToken(res.data.accessToken))
                         navigate('/home')
                     }
                 })
